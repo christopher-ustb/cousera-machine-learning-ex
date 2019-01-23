@@ -62,33 +62,43 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-% forward propagation
-X = [ones(m, 1) X];
-z2 = X * Theta1';
-a2 = sigmoid(z2);
-a2 = [ones(m, 1) a2];
-z3 = a2 * Theta2';
-a3 = sigmoid(z3);
 
 for i=1:m
-    a3i = a3(i,:);
-    yi = y(i);
-    vecor_yi = zeros(num_labels, 1);
-    vecor_yi(yi) = 1;
+    a_1 = [1, X(i,:)]';
+    z_2 = Theta1 * a_1;
+    a_2 = [1; sigmoid(z_2)];
+    z_3 = Theta2 * a_2;
+    a_3 = sigmoid(z_3);
+
+    vector_y = zeros(num_labels, 1);
+    vector_y(y(i)) = 1;
+
     J = J + ( 
-        - log(a3i) * vecor_yi 
-        - log(1 - a3i) * (1 - vecor_yi)
+        - log(a_3)' * vector_y 
+        - log(1 - a_3)' * (1 - vector_y)
     );
+    
+    delta3 = a_3 - vector_y;
+
+    delta2 = (Theta2' * delta3).*(sigmoidGradient([0; z_2]));
+
+    Theta1_grad = Theta1_grad + delta2(2:end) * a_1';
+    Theta2_grad = Theta2_grad + delta3 * a_2';    
+
 end
 
-J = J / m;
+J = J / m + (
+    sum(
+        (Theta1(:,2:end).^2)(:)
+    ) 
+    + 
+    sum(
+        (Theta2(:,2:end).^2)(:)
+    )
+) * lambda / (2 * m);
 
-
-
-
-
-
-
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
 
 
 
