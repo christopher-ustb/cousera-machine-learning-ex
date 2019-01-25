@@ -53,11 +53,16 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
-
-
-
-
-
+for i = 1:m
+    X_train_sub = X(1:i, :);
+    y_train_sub = y(1:i);
+    % options = optimset('GradObj', 'on', 'MaxIter', 400);
+    % costFunction = @(t)(linearRegCostFunction(X_train_sub, y_train_sub, t, lambda));
+    % [theta, cost] = fmincg(costFunction, zeros(size(X, 2), 1), options);
+    theta = trainLinearReg(X_train_sub, y_train_sub, lambda);
+    error_train(i) = linearRegCostFunction(X_train_sub, y_train_sub, theta, 0);
+    error_val(i) = linearRegCostFunction(Xval, yval, theta, 0);
+end
 
 % -------------------------------------------------------------
 
