@@ -32,7 +32,7 @@ for i = 1:candidates_length
         current_sigma = candidates(j);
         model = svmTrain(X, y, current_c, @(x1, x2) gaussianKernel(x1, x2, current_sigma));
         predictions = svmPredict(model, Xval);
-        prediction_error = mean(double(predictions ~= yval))
+        prediction_error = mean(double(predictions ~= yval));
         if min_prediction_error == -1 || prediction_error < min_prediction_error
             min_prediction_error = prediction_error;
             C = current_c;
