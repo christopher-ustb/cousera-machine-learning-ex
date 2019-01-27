@@ -21,11 +21,19 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
-
-
-
-
-
+m = size(X, 1);
+for i = 1:m
+    x_i = X(i,:);
+    closest_distance_square = -1;
+    for j = 1:K
+        dif = x_i - centroids(j, :);
+        distance_square_j = dif * dif';
+        if closest_distance_square == -1 || distance_square_j < closest_distance_square
+            idx(i) = j;
+            closest_distance_square = distance_square_j;
+        end
+    end
+end
 
 % =============================================================
 
